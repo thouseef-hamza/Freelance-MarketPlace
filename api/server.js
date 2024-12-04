@@ -29,12 +29,11 @@ const allowedOrigins = [
   'http://localhost:5173',
   'https://freelance-market-place-shp4-git-main-thousi731s-projects.vercel.app',
   'https://freelance-market-place-shp4-r0ec6lx8x-thousi731s-projects.vercel.app',
-  'https://freelance-market.vercel.app/'
+  'https://freelance-market.vercel.app', 
 ];
 
 app.use(express.json());
 app.use(cookieParser());
-
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -49,9 +48,6 @@ app.use(
     credentials: true
   })
 );
-
-// Handle preflight requests
-app.options('*', cors());
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
