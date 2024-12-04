@@ -26,7 +26,9 @@ const connect = async () => {
 
 const allowedOrigins = [
   'https://freelance-market-place-shp4.vercel.app',
-  'http://localhost:5173'
+  'http://localhost:5173',
+  'https://freelance-market-place-shp4-git-main-thousi731s-projects.vercel.app',
+  'https://freelance-market-place-shp4-r0ec6lx8x-thousi731s-projects.vercel.app/'
 ];
 
 app.use(express.json());
