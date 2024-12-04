@@ -24,18 +24,18 @@ const connect = async () => {
   }
 };
 
-
 const allowedOrigins = [
   'https://freelance-market-place-shp4.vercel.app',
   'http://localhost:5173'
 ];
-    
+
 app.use(express.json());
 app.use(cookieParser());
 
 app.use(
   cors({
     origin: function (origin, callback) {
+      console.log("Origin:", origin); // Log the incoming origin
       if (!origin) return callback(null, true);
       if (allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
@@ -44,7 +44,11 @@ app.use(
       }
     },
     credentials: true
-}));
+  })
+);
+
+// Handle preflight requests
+app.options('*', cors());
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
@@ -57,7 +61,6 @@ app.use("/api/reviews", reviewRoute);
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";
-
   return res.status(errorStatus).send(errorMessage);
 });
 
