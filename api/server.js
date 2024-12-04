@@ -28,8 +28,11 @@ const connect = async () => {
 const allowedOrigins = [
   'https://freelance-market-place-shp4.vercel.app',
   'http://localhost:5173'
-]
+];
     
+app.use(express.json());
+app.use(cookieParser());
+
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -42,10 +45,6 @@ app.use(
     },
     credentials: true
 }));
-
-
-app.use(express.json());
-app.use(cookieParser());
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
