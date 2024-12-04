@@ -23,12 +23,27 @@ const connect = async () => {
     console.log(error);
   }
 };
+
+
+const allowedOrigins = [
+  'https://freelance-market-place-shp4.vercel.app',
+  'http://localhost:5173'
+]
+    
 app.use(
   cors({
-    origin: "*",
-    credentials: true,
-  })
-);
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true
+}));
+
+
 app.use(express.json());
 app.use(cookieParser());
 
