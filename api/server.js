@@ -14,29 +14,42 @@ import cors from "cors";
 const app = express();
 dotenv.config();
 mongoose.set("strictQuery", true);
+
+// MongoDB connection
 const connect = async () => {
   try {
     await mongoose.connect(process.env.MONGO);
-    console.log("database connected");
+    console.log("Database connected");
   } catch (error) {
     console.log(error);
   }
 };
-//middleware
-//frontend port number
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", process.env.ORIGIN);
-    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
 
-    if (req.method === "OPTIONS") {
-        return res.status(204).end();
-    }
-    next();
-});
-app.use(express.json());
+// CORS configuration
+const allowedOrigins = [
+  'https://freelance-market-place.vercel.app', 
+  'https://freelance-market-place-git-main.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:5173', 
+  'http://192.168.5.228:3000', 
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true); // Allow the request
+      } else {
+        callback(new Error("Not allowed by CORS.!")); // Block the request
+      }
+    },
+    credentials: true,
+  })
+);
+
 app.use(cookieParser());
+app.use(express.json());
 
 app.use("/api/auth/", authRoute);
 app.use("/api/users", userRoute);
@@ -48,12 +61,12 @@ app.use("/api/messages", messageRoute);
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;
-  const errorMessage = err.message || "Something went wrong";
-
+  const errorMessage = err.message || "Something went wrong!";
   return res.status(errorStatus).send(errorMessage);
 });
-//backend port number
-app.listen(8000, () => {
+
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
   connect();
-  console.log("localserver running");
+  console.log(`Server running on port ${PORT}`);
 });
