@@ -37,20 +37,24 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
+      if (!origin) return callback(null, true); // Allow requests from server-side or non-browser sources
       if (allowedOrigins.includes(origin)) {
         callback(null, true); // Allow the request
       } else {
-        callback(new Error("Not allowed by CORS.!")); // Block the request
+        callback(new Error("Not allowed by CORS.")); // Block the request
       }
     },
-    credentials: true,
+    credentials: true, // Allow credentials like cookies to be sent
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow these methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
   })
 );
 
+// Middleware
 app.use(cookieParser());
 app.use(express.json());
 
+// Routes
 app.use("/api/auth/", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/gigs", gigRoute);
@@ -59,10 +63,16 @@ app.use("/api/orders", orderRoute);
 app.use("/api/conversations", conversationRoute);
 app.use("/api/messages", messageRoute);
 
+// Handling errors
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";
   return res.status(errorStatus).send(errorMessage);
+});
+
+// Handle OPTIONS requests (preflight)
+app.options("*", (req, res) => {
+  res.status(200).send(); // Respond with a 200 OK for preflight requests
 });
 
 const PORT = process.env.PORT || 8000;
