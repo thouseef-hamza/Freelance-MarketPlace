@@ -34,6 +34,14 @@ const allowedOrigins = [
   'http://192.168.5.228:3000', 
 ];
 
+app.options("*", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.status(200).send();  
+});
+
 app.use(
   cors({
     origin: function (origin, callback) {
