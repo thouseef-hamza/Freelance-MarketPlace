@@ -12,28 +12,13 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 const app = express();
-dotenv.config();
-mongoose.set("strictQuery", true);
-
-const connect = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO);
-    console.log("Connected to mongoDB!");
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 const allowedOrigins = [
   'https://freelance-market-place-shp4.vercel.app',
   'http://localhost:5173',
   'https://freelance-market-place-shp4-git-main-thousi731s-projects.vercel.app',
   'https://freelance-market-place-shp4-r0ec6lx8x-thousi731s-projects.vercel.app',
-  'https://freelance-market.vercel.app', 
+  'https://freelance-market.vercel.app',
 ];
-
-app.use(express.json());
-app.use(cookieParser());
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -49,6 +34,22 @@ app.use(
   })
 );
 
+dotenv.config();
+mongoose.set("strictQuery", true);
+
+const connect = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO);
+    console.log("Connected to mongoDB!");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+app.use(express.json());
+app.use(cookieParser());
+
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/gigs", gigRoute);
@@ -63,7 +64,15 @@ app.use((err, req, res, next) => {
   return res.status(errorStatus).send(errorMessage);
 });
 
-app.listen(8800, () => {
+const PORT = 8800;
+
+//write the code for show the messsage on screen when server is running
+
+app.get("/", (req, res) => {
+  res.send("Server is running");
+});
+
+app.listen(PORT, () => {
   connect();
-  console.log("Backend server is running!");
+  console.log(`Server is running on port ${PORT}`);
 });
