@@ -1,9 +1,12 @@
 import axios from "axios";
 
-//backend port number
-const newRequest=axios.create({
-    baseURL:"https://lionfish-app-omgjk.ondigitalocean.app/api/",
-    withCredentials:true,
-})
+const newRequest = axios.create({
+  baseURL: "https://lionfish-app-omgjk.ondigitalocean.app/api/",
+  // baseURL: "http://localhost:8800/api/",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-export default newRequest;
+export default newRequest;
