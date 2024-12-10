@@ -24,7 +24,17 @@ const connect = async () => {
 };
 //middleware
 //frontend port number
-app.use(cors({ origin: process.env.ORIGIN, credentials: true }));
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", process.env.origin);
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+
+    if (req.method === "OPTIONS") {
+        return res.status(204).end();
+    }
+    next();
+});
 app.use(express.json());
 app.use(cookieParser());
 
