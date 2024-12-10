@@ -2,7 +2,7 @@ import axios from "axios";
 
 //backend port number
 const newRequest=axios.create({
-    baseURL:"http://localhost:8000/api/",
+    baseURL:"https://freelance-market-place.vercel.app/api/",
     withCredentials:true,
 })
 
