@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './success.scss'
 import { useEffect } from 'react';
 import newRequest from '../../utils/newRequest';
+
 const Success = () => {
     const { search } = useLocation();
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ const Success = () => {
             }
         }
         makeRequest();
-    }, []);
+    }, [payment_intent,navigate]);
     return (
        [  <div className="cm">
       <img src="images/successfully-done.gif" alt="" />
